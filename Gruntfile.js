@@ -7,10 +7,25 @@ module.exports = function(grunt) {
     grunt.registerTask( 'run', [ 'hapi', 'watch' ]);
 
     grunt.initConfig({
+
+        // babel: {
+        //     options: {
+        //         sourceMap: true
+        //     },
+        //     dist: {
+        //         files: {
+        //             'dist/js/app.js': './app/scripts/app.jsx'
+        //         }
+        //     }
+        // },
+
         browserify: {
             dist: {
+                options: {
+                    transform: [["babelify", {"stage": 0}]]
+                },
                 files: {
-                    './dist/js/app.js': ['./app/scripts/app.js']
+                    './dist/js/app.js': ['./app/scripts/app.jsx']
                 }
             }
         },
