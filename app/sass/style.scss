@@ -31,6 +31,7 @@ img {
 	height: 20px;
 }
 
-#comment {
+.comment {
 	@include sq-element();
+	display: inline-block;
 }

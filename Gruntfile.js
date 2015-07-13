@@ -20,6 +20,10 @@ module.exports = function(grunt) {
         // },
 
         browserify: {
+            options: {
+                debug: true,
+                verbose: true
+            },
             dist: {
                 options: {
                     transform: [["babelify", {"stage": 0}]]

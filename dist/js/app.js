@@ -11,6 +11,14 @@ var App = React.createClass({
 		this.bindAsArray(new Firebase("https://critlink.firebaseio.com/crits/"), "crits");
 	},
 
+	componentDidMount: function componentDidMount() {
+		document.addEventListener("click", this._clickOut);
+	},
+
+	componentWillUnmount: function componentWillUnmount() {
+		document.removeEventListener("click", this._clickOut);
+	},
+
 	getInitialState: function getInitialState() {
 		return {
 			crits: []
@@ -18,6 +26,7 @@ var App = React.createClass({
 	},
 
 	openCrit: function openCrit(e) {
+		var self = this;
 		this.setState({ x: e.pageX });
 		this.setState({ y: e.pageY });
 		// this.firebaseRefs["crits"].push({
@@ -25,20 +34,26 @@ var App = React.createClass({
 		// 	xPosition: this.state.x,
 		// 	yPosition: this.state.y
 		// });
+		setTimeout(function () {
+			self.refs.input.getDOMNode().focus();
+		}, 1);
 		console.log(this.state.text, e.pageX, e.pageY);
 	},
 
 	submitCrit: function submitCrit(e) {
-		this.setState({ created: "true" });
+
 		if (this.state.text !== undefined) {
+			e.preventDefault();
+			this.setState({ created: "true" });
+			console.log(this.state.created);
 			this.firebaseRefs["crits"].push({
 				text: this.state.text,
 				xPosition: this.state.x,
-				yPosition: this.state.y,
-				created: this.state.created
+				yPosition: this.state.y
 			});
 			this.setState({ text: undefined });
 		}
+		this._clickOut();
 	},
 
 	handleChange: function handleChange(event) {
@@ -50,7 +65,13 @@ var App = React.createClass({
 		this.setState({ x: null });
 	},
 
+	_captureClicks: function _captureClicks(e) {
+		e.nativeEvent.stopImmediatePropagation();
+		e.stopPropagation();
+	},
+
 	render: function render() {
+		console.log(this.state.crits[0], Date.now());
 		return React.createElement(
 			"div",
 			null,
@@ -61,30 +82,34 @@ var App = React.createClass({
 			),
 			React.createElement(
 				"div",
-				{ id: "image" },
+				{ id: "image", onClick: this._captureClicks },
 				React.createElement("img", { src: "http://static.tumblr.com/4a0e48e18cbd85da3092407c562a9a72/bnfotgl/COhn17d4j/tumblr_static_spiky_haired_guy_bg.png",
 					onClick: this.openCrit }),
+				this.state.crits.map(function (crit, index) {
+					return React.createElement(
+						"div",
+						{ className: "comment",
+							key: index,
+							style: { top: crit.yPosition, left: crit.xPosition, position: "absolute" } },
+						React.createElement(
+							"p",
+							null,
+							crit.text
+						)
+					);
+				}),
 				this.state.x && React.createElement(
-					"div",
-					{ id: "popup", style: { top: this.state.y, left: this.state.x, position: "absolute" } },
-					React.createElement("input", { form: "text",
+					"form",
+					{ id: "popup", onSubmit: this.submitCrit, style: { top: this.state.y, left: this.state.x, position: "absolute" } },
+					React.createElement("input", { name: "text",
 						placeholder: "Enter your comment here!",
 						id: "comment-form",
-						onChange: this.handleChange }),
+						onChange: this.handleChange,
+						ref: "input" }),
 					React.createElement(
 						"button",
-						{ type: "button", id: "btn", onClick: this.submitCrit },
+						{ type: "submit", id: "btn" },
 						"Submit"
-					)
-				),
-				this.state.created && React.createElement(
-					"div",
-					{ id: "comment",
-						style: { top: this.state.y, left: this.state.x, position: "absolute" } },
-					React.createElement(
-						"p",
-						null,
-						this.state.text
 					)
 				)
 			)
