@@ -1,0 +1,36 @@
+body {
+	background-image: url('../images/images/bg-tile.png');
+}
+
+@mixin sq-element() {
+	background-color: white;
+	border: black 1px solid;
+	box-shadow: 5px 5px 5px 5px rgba(0, 0, 0, 0.4);
+	margin: 10px 0 10px 0;
+}
+
+.titlebox {
+	@include sq-element();
+	display: inline-block;
+	padding: 3px;
+}
+
+img {
+	@include sq-element();
+}
+
+#comment-form {
+	@include sq-element();
+	width: 140px;
+	height: 16px;
+	padding: 2px;
+}
+
+#btn {
+	@include sq-element();
+	height: 20px;
+}
+
+#comment {
+	@include sq-element();
+}

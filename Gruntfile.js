@@ -53,7 +53,7 @@ module.exports = function(grunt) {
             hapi: {
                 files: [
                     './app/images/*.{png,jpg,jpeg}',
-                    './app/scripts/**/*.js',
+                    './app/scripts/**/*.jsx',
                     './app/sass/**/*.scss',
                     './app/pages/**/*.html',
                     './app/templates/**/*.html',
