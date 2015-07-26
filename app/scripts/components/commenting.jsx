@@ -1,35 +1,7 @@
-import { Router, Route, Link } from 'react-router';
-var React = require('react'),
-    Draggable = require('react-draggable');
+var React = require('react');
+var Draggable = require('react-draggable');
 
-var body = document.body;
-
-var Home = React.createClass({
-
-	mixins: [ReactFireMixin],
-	componentWillMount: function () {
-	    this.bindAsArray(new Firebase("https://critlink.firebaseio.com/"));
-	},
-
-	enterURL: function(){
-		this.setState({url : event.target.value});
-		// this.firebaseRefs
-	},
-
-	render: function() {
-		return (
-			<div>
-				<div className="titlebox">
-        			CRITlink
-    			</div>
-
-    			<input type="text" placeholder="Paste your image URL here.">
-    			<button type="button"><Link to={"/#"}>Submit</Link></button>
-		);
-	}
-});
-
-var App = React.createClass({
+var Comments = React.createClass({
 
 	mixins: [ReactFireMixin],
 	componentWillMount: function () {
@@ -133,7 +105,4 @@ var App = React.createClass({
   }
 });
 
-React.render(
-  <App />,
-  document.body
-);
+module.exports = Comments;
